@@ -26,8 +26,6 @@ jobs:
         run: curl -sL firebase.tools | bash
       - name: Install deps
         run: pnpm install
-      - name: Build SvelteKit
-        run: pnpm build
       - name: Deploy to Firebase
         run: firebase deploy
         env:
