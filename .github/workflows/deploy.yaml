@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - name: Install Firebase CLI
-        run: curl -sL firebase.tools | bash
+        run: pnpm i -g firebase-tools
       - name: Install deps
         run: pnpm install
       - name: Deploy to Firebase
