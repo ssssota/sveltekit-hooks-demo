@@ -1,0 +1,34 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Install Firebase CLI
+        run: curl -sL firebase.tools | bash
+      - name: Install deps
+        run: pnpm install
+      - name: Build SvelteKit
+        run: pnpm build
+      - name: Deploy to Firebase
+        run: firebase deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
