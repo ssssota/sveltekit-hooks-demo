@@ -7,7 +7,8 @@ import cookie from 'cookie';
 const getUserFromSession: (session: string) => Promise<User> = async (
 	session
 ) => {
-	console.log({ session });
+	if (!auth)
+		return Promise.reject(new Error('Firebase auth is not initialized'));
 	const decoded = await auth.verifySessionCookie(session);
 	const user = await auth.getUser(decoded.uid);
 	return {
@@ -18,8 +19,11 @@ const getUserFromSession: (session: string) => Promise<User> = async (
 
 export const handle: Handle<Locals> = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '');
-	if (cookies['session'])
-		request.locals.user = await getUserFromSession(cookies['session']);
+	if (cookies['session']) {
+		request.locals.user = await getUserFromSession(cookies['session']).catch(
+			() => undefined
+		);
+	}
 	return resolve(request);
 };
 
