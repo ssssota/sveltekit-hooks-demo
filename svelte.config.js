@@ -9,7 +9,10 @@ const config = {
 
 	kit: {
 		adapter: adapt(),
-		target: '#svelte'
+		target: '#svelte',
+		vite: {
+			ssr: { external: ['firebase', 'firebase-admin'] }
+		}
 	}
 };
 

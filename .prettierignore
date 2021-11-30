@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+/public
+/build
+/.svelte-kit
+/package
+/.firebase
+/functions/ssrServer
+.env
+*.log
+*lock.yaml
