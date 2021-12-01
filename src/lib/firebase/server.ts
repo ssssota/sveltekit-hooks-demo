@@ -1,5 +1,4 @@
-import { browser } from '$app/env';
-import * as admin from 'firebase-admin';
+import admin from 'firebase-admin';
 
-const app = browser ? admin.initializeApp() : undefined;
-export const auth = app?.auth();
+const app = admin.initializeApp();
+export const auth = app.auth();

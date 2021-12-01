@@ -7,8 +7,6 @@ import cookie from 'cookie';
 const getUserFromSession: (session: string) => Promise<User> = async (
 	session
 ) => {
-	if (!auth)
-		return Promise.reject(new Error('Firebase auth is not initialized'));
 	const decoded = await auth.verifySessionCookie(session);
 	const user = await auth.getUser(decoded.uid);
 	return {
