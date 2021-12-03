@@ -1,6 +1,7 @@
 import type { User } from '$lib/auth';
 import { auth } from '$lib/firebase/server';
 import type { Locals } from '$lib/locals';
+import { sessionKey } from '$lib/session';
 import type { GetSession, Handle } from '@sveltejs/kit';
 import cookie from 'cookie';
 
@@ -17,11 +18,9 @@ const getUserFromSession: (session: string) => Promise<User> = async (
 
 export const handle: Handle<Locals> = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '');
-	if (cookies['session']) {
-		request.locals.user = await getUserFromSession(cookies['session']).catch(
-			() => undefined
-		);
-	}
+	request.locals.user = cookies[sessionKey]
+		? await getUserFromSession(cookies[sessionKey]).catch(() => undefined)
+		: undefined;
 	return resolve(request);
 };
 
@@ -29,5 +28,5 @@ export const getSession: GetSession<Locals, unknown, User | undefined> = (
 	request
 ) => {
 	console.log('getSession called', request.locals);
-	return request.locals?.user;
+	return request.locals.user;
 };
